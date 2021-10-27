@@ -10,8 +10,8 @@ import (
 	"math/rand"
 	"net"
 
-	"bank_app/failuredetector"
-	"bank_app/multipaxos"
+	"github.com/Bank_app/failuredetector"
+	"github.com/bank_app/multipaxos"
 )
 
 // forwadrdClientResp looks up for client id from the response struct and connected port.

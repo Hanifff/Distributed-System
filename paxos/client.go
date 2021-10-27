@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"bank_app/bank"
-	"bank_app/multipaxos"
+	"github.com/bank_app/bank"
+	"github.com/bank_app/multipaxos"
 )
 
 // paxosConnection connects a client with one of the running paxos nodes.

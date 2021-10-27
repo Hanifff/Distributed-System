@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	"bank_app/bank"
-	"bank_app/failuredetector"
-	"bank_app/leaderdetector"
-	"bank_app/multipaxos"
+	"github.com/bank_app/bank"
+	"github.com/bank_app/failuredetector"
+	"github.com/bank_app/leaderdetector"
+	"github.com/bank_app/multipaxos"
 )
 
 // PaxosMsg is a instance of paxos messages
