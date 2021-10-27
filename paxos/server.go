@@ -12,7 +12,7 @@ import (
 	"sync"
 	"time"
 
-	"bgithub.com/Bank_app/leaderdetector"
+	"github.com/Bank_app/leaderdetector"
 	"github.com/Bank_app/multipaxos"
 
 	"github.com/Bank_app/failuredetector"
