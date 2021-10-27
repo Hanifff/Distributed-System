@@ -1,7 +1,7 @@
 package multipaxos
 
 import (
-	"bank_app/bank"
+	"dnb/bank_app/bank"
 	"fmt"
 )
 

@@ -5,9 +5,10 @@ import (
 	"net"
 	"time"
 
-	"github.com/Bank_app/failuredetector"
-	"github.com/Bank_app/leaderdetector"
-	"github.com/Bank_app/multipaxos"
+	"dnb/bank_app/failuredetector"
+
+	"dnb/bank_app/leaderdetector"
+	"dnb/bank_app/multipaxos"
 )
 
 // initInstances initializes intances of all paxos components and leader detector

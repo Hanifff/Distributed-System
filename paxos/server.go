@@ -12,10 +12,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/Bank_app/leaderdetector"
-	"github.com/Bank_app/multipaxos"
-
-	"github.com/Bank_app/failuredetector"
+	"dnb/bank_app/failuredetector"
+	"dnb/bank_app/leaderdetector"
+	"dnb/bank_app/multipaxos"
 )
 
 // handlePaxosMsg handles the consesus communication messages in phase one of Paxos algorithm.

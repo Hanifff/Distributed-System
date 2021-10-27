@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/bank_app/multipaxos"
+	"dnb/bank_app/multipaxos"
 )
 
 // MPaxosClient handles client communicatations with the paxos server

@@ -7,7 +7,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/bank_app/leaderdetector"
+	"dnb/bank_app/leaderdetector"
 )
 
 // Proposer represents a proposer as defined by the Multi-Paxos algorithm.
