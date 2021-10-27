@@ -102,9 +102,6 @@ func (e *EvtFailureDetector) Start() {
 				} else {
 					e.setAlive(msg.From)
 				}
-			/* case id := <-e.increseNodes:
-			e.nodeIDs = append(e.nodeIDs, id) */
-			//e.sr.Restore(id) // call the resotore method to notify the leaderdetector about a new node?!
 			case <-e.timeoutSignal.C:
 				e.timeout()
 			case <-e.stop:
@@ -154,7 +151,6 @@ func (e *EvtFailureDetector) timeout() {
 				e.lockSus[p].Unlock()
 			}
 		} else if e.alive[p] && e.suspected[p] {
-			// TODO: make lock before deletes too
 			delete(e.suspected, p)
 			delete(e.lockSus, p)
 			e.sr.Restore(p)

@@ -210,7 +210,7 @@ func handleClients(conn *net.TCPConn, proposer *multipaxos.Proposer, ld *leaderd
 			log.Println("Error while decoding client request.", err)
 			return
 		}
-		fmt.Println("rcv :", pxmsg)
+		fmt.Printf("Transaction from client:%v\n", pxmsg)
 		if pxmsg.Msg != nil {
 			switch pxmsg.Mod {
 			case "CLIENTREQ":

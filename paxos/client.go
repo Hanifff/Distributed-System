@@ -99,7 +99,7 @@ func request(mpaxoscli *MPaxosClient, scanner *bufio.Scanner) {
 				ClientSeq:  mpaxoscli.clientSeq,
 				AccountNum: converter(input[0]),
 				Txn: bank.Transaction{
-					Op:     bank.Operation(converter(input[1])), // TODO: check this
+					Op:     bank.Operation(converter(input[1])),
 					Amount: converter(input[2]),
 				},
 				RC: multipaxos.ReConfiguration{

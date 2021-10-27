@@ -233,7 +233,6 @@ func (p *Proposer) increaseCrnd() {
 func (p *Proposer) startPhaseOne() {
 	p.phaseOneDone = false
 	p.promises = make([]*Promise, p.n)
-	fmt.Println("number of node in handling promisses : ", p.n)
 	p.increaseCrnd()
 	p.prepareOut <- Prepare{From: p.id, Slot: p.adu, Crnd: p.crnd}
 }

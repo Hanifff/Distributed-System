@@ -48,13 +48,9 @@ type DistributedServer struct {
 
 // NewDistributedServer create new instainces of a MultiPaxos server
 func NewDistributedServer(id int, nrOfPaxosNodes int) *DistributedServer {
-	serverIPs := []string{"localhost:1234", "localhost:1235", "localhost:1236"}
-	/* , "localhost:1237",
-	"localhost:1238", "localhost:1239", "localhost:1240" */
-	//serverIPs := []string{"172.28.1.2:1234", "172.28.1.3:1235", "172.28.1.4:1236",
-	//	"172.28.1.5:1237", "172.28.1.6:1238", "172.28.1.7:1239", "172.28.1.8:1240"}
-	//serverIPs := []string{"152.94.1.110:1234", "152.94.1.119:1235", "152.94.1.115:1236"} //pi11,pi20, pi16
-	nodes := []int{1234, 1235, 1236} /* , 1237, 1238, 1239, 1240 */
+	serverIPs := []string{"172.28.1.2:1234", "172.28.1.3:1235", "172.28.1.4:1236",
+		"172.28.1.5:1237", "172.28.1.6:1238", "172.28.1.7:1239", "172.28.1.8:1240"}
+	nodes := []int{1234, 1235, 1236, 1237, 1238, 1239, 1240}
 	return &DistributedServer{
 		resp:      make(chan failuredetector.Heartbeat),
 		id:        id,
@@ -114,53 +110,29 @@ func (ds *DistributedServer) handleDecideValue(dcdVal *multipaxos.DecidedValue, 
 	ld *leaderdetector.MonLeaderDetector, proposer *multipaxos.Proposer, acceptor *multipaxos.Acceptor,
 	learner *multipaxos.Learner) {
 	stop := make(chan struct{})
-	if dcdVal.Value.RC.Reconfig {
-		fmt.Println("Decided! We reconfigure..", dcdVal)
-		dcdVal.Value.RC.Reconfig = false
-		ds.reconfigProcces = true
-
-		ds.nrOfServers = dcdVal.Value.RC.NumberOfNodes
-		// connection processes to the new node
-		ds.nodes = append(ds.nodes, allNodeIDs[ds.nrOfServers-1])
-		connectReconf()
-		ds.notifyClientScaleUp()
-		newNodeID := allNodeIDs[ds.nrOfServers-1]
-		fd.AddNode(newNodeID)
-		ld.AddNode(newNodeID)
-		proposer.IncreaseNrOfNodes(ds.nrOfServers)
-		learner.IncreaseNrOfNodes(ds.nrOfServers)
+	fmt.Printf("Handling decided value:%v", dcdVal)
+	if dcdVal.SlotID > multipaxos.SlotID(ds.adu)+1 {
+		fmt.Println("buffering values..")
+		ds.bufferedValues = append(ds.bufferedValues, dcdVal)
+		return
+	}
+	if !dcdVal.Value.Noop {
+		txnRes := ds.handleAccount(dcdVal.Value)
+		response := multipaxos.Response{
+			ClientID:  dcdVal.Value.ClientID,
+			ClientSeq: dcdVal.Value.ClientSeq,
+			TxnRes:    txnRes,
+			NrOfNodes: ds.nrOfServers,
+			ScaledUp:  false,
+		}
+		forwadrdClientResp(&response, stop)
+	}
+	if !ds.reconfigProcces {
 		proposer.IncrementAllDecidedUpTo()
 		ds.adu++
-		fmt.Println("ds.adu :", ds.adu)
-		return
-	} else {
-		fmt.Println("Handling decided value: ", dcdVal)
-		if dcdVal.SlotID > multipaxos.SlotID(ds.adu)+1 {
-			fmt.Println("buffering values..")
-			ds.bufferedValues = append(ds.bufferedValues, dcdVal)
-			return
-		}
-		if !dcdVal.Value.Noop {
-			txnRes := ds.handleAccount(dcdVal.Value)
-			response := multipaxos.Response{
-				ClientID:  dcdVal.Value.ClientID,
-				ClientSeq: dcdVal.Value.ClientSeq,
-				TxnRes:    txnRes,
-				NrOfNodes: ds.nrOfServers,
-				ScaledUp:  false,
-			}
-			forwadrdClientResp(&response, stop)
-		}
-		if !ds.reconfigProcces {
-			proposer.IncrementAllDecidedUpTo()
-			ds.adu++
-		}
-		fmt.Println("ds.adu :", ds.adu)
-		for _, dv := range ds.bufferedValues {
-			ds.handleDecideValue(dv, fd, ld, proposer, acceptor, learner)
-		}
-		// goes in loop in case a buffered value
-		return
+	}
+	for _, dv := range ds.bufferedValues {
+		ds.handleDecideValue(dv, fd, ld, proposer, acceptor, learner)
 	}
 }
 
@@ -186,17 +158,6 @@ func (ds *DistributedServer) isClient(conn *net.TCPConn) bool {
 		return true
 	}
 	return false
-}
-
-func (ds *DistributedServer) notifyClientScaleUp() {
-	stop := make(chan struct{})
-	response := multipaxos.Response{
-		ClientID:  "Reconfugration",
-		NrOfNodes: ds.nrOfServers,
-		TxnRes:    bank.TransactionResult{},
-		ScaledUp:  true,
-	}
-	forwadrdClientResp(&response, stop)
 }
 
 // initGob initializes Paxos messages in gob

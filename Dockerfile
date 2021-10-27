@@ -8,6 +8,6 @@ COPY . /go/src/app
 WORKDIR /go/src/app
 
 #Build and install your application inside the container.
-RUN go build -o ./Bank_app/paxos
+RUN go install -v ./Bank_app/paxos
 
 ENTRYPOINT ["/go/bin/paxos"]
