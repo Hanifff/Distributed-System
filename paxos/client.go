@@ -200,7 +200,7 @@ mainLoop:
 				break mainLoop
 			}
 		case resp := <-mpaxoscli.responseChan:
-			fmt.Println("got response form paxos servers: ", resp.String())
+			fmt.Printf("%s\n", resp.TxnRes.String())
 			mpaxoscli.timeOut = make(chan time.Time) // set to nil after response
 			if resp.ScaledUp {
 				mpaxoscli.totalSevers = resp.NrOfNodes

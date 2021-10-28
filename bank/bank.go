@@ -56,11 +56,7 @@ type TransactionResult struct {
 
 // String returns a string representation of TransactionResult tr.
 func (tr TransactionResult) String() string {
-	if tr.ErrorString == "" {
-		return fmt.Sprintf("Transaction OK. Account: %d, Balance: %d NOK", tr.AccountNum, tr.Balance)
-	}
-
-	return fmt.Sprintf("Transaction error for account %d. Error: %s", tr.AccountNum, tr.ErrorString)
+	return fmt.Sprintf("Transaction OK. Account: %d, Balance: %d NOK", tr.AccountNum, tr.Balance)
 }
 
 // Account represents a bank account with an account number and a balance.
