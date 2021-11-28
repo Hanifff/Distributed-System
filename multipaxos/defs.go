@@ -5,7 +5,6 @@ import (
 	"fmt"
 )
 
-// Type definitions - DO NOT EDIT
 
 // SlotID represents an identifier for a Multi-Paxos consensus instance.
 type SlotID int
