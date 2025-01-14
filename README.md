@@ -1,4 +1,4 @@
-# Simple Bank application
+# Demo Bank application
 
 This project is a simple bank application that utilizes the standard consensus algorithm [PAXOS](https://lamport.azurewebsites.net/pubs/paxos-simple.pdf).</br>
 
